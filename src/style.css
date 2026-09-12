@@ -1,14 +1,19 @@
 @import "tailwindcss";
 
+/*
+ * Color theme shared with the BG portfolio site (portfolio-2025):
+ * purple/green duo on a warm off-white paper, dark ink for contrast.
+ */
 @theme {
   --font-display: "Bricolage Grotesque", "Arial Black", sans-serif;
   --font-body: "Work Sans", system-ui, sans-serif;
 
-  --color-ink: #111110;
-  --color-paper: #f7f5ef;
-  --color-paper-dim: #ece9df;
-  --color-accent: #d7ff3f;
-  --color-accent-ink: #1c1f06;
+  --color-ink: #333333;
+  --color-paper: #fef9e7;
+  --color-paper-dim: #f5edd0;
+  --color-accent: #6c3baa;
+  --color-accent-2: #3baa99;
+  --color-accent-ink: #ffffff;
 }
 
 html {
@@ -98,4 +103,82 @@ body {
     opacity: 1;
     transform: none;
   }
+}
+
+/* CTA button — bordered pill that fills on hover (ported from the
+   portfolio's CtaBtn component: a sliding color panel behind the label) */
+.btn-cta {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.btn-cta .btn-cta-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background: var(--color-accent-2);
+  transform: translateY(100%);
+  transition: transform 0.25s ease-out;
+}
+
+.btn-cta:hover .btn-cta-bg {
+  transform: translateY(0);
+}
+
+.btn-cta .btn-cta-label {
+  position: relative;
+  z-index: 1;
+  transition: color 0.2s ease-out;
+}
+
+.btn-cta:hover .btn-cta-label {
+  color: #fff;
+}
+
+/* Project / work cards — offset color shadow behind a bordered panel that
+   fills with the accent color on hover (ported from the portfolio's
+   ServiceCard component) */
+.project-card .project-card-shadow {
+  position: absolute;
+  inset: 0;
+  border-radius: 1rem;
+  background: var(--color-accent-2);
+  transform: translate(0.5rem, 0.5rem);
+  transition: transform 0.3s ease;
+}
+
+.project-card:hover .project-card-shadow {
+  transform: translate(0.75rem, 0.75rem);
+}
+
+.project-card .project-card-face {
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease;
+}
+
+.project-card:hover .project-card-face {
+  background: var(--color-accent);
+  color: #fff;
+}
+
+/* Footer headline — duotone layered text (ported from the portfolio's
+   Footer heading, purple over a green echo layer) */
+.duotone-heading {
+  position: relative;
+  display: inline-block;
+}
+
+.duotone-heading .duotone-back {
+  position: absolute;
+  top: 0;
+  left: 0;
+  color: var(--color-accent-2);
+  transition: transform 0.2s ease-out;
+}
+
+.duotone-heading .duotone-front {
+  position: relative;
+  color: var(--color-accent);
 }
