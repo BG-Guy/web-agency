@@ -28,10 +28,10 @@ const services = [
 ]
 
 const projects = [
-  { name: 'Northfield Studio', tag: 'Architecture · 2025', hue: '#d7ff3f' },
-  { name: 'Marlow & Co.', tag: 'Hospitality · 2025', hue: '#ffb4a2' },
-  { name: 'Petra Fintech', tag: 'SaaS · 2024', hue: '#a2d2ff' },
-  { name: 'Kiln Ceramics', tag: 'E-commerce · 2024', hue: '#c8b6ff' },
+  { name: 'Northfield Studio', tag: 'Architecture · 2025' },
+  { name: 'Marlow & Co.', tag: 'Hospitality · 2025' },
+  { name: 'Petra Fintech', tag: 'SaaS · 2024' },
+  { name: 'Kiln Ceramics', tag: 'E-commerce · 2024' },
 ]
 
 const process = [
@@ -60,8 +60,9 @@ document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
         <a href="#contact" class="nav-link">Contact</a>
       </nav>
       <div class="flex items-center gap-3">
-        <a href="#contact" class="hidden sm:inline-flex text-sm font-semibold border border-[var(--color-ink)] rounded-full px-5 py-2 hover:bg-[var(--color-ink)] hover:text-[var(--color-paper)] transition-colors">
-          Start a project
+        <a href="#contact" class="btn-cta hidden sm:inline-flex text-sm font-semibold border border-[var(--color-ink)] rounded-full px-5 py-2">
+          <span class="btn-cta-bg"></span>
+          <span class="btn-cta-label">Start a project</span>
         </a>
         <button id="menu-toggle" type="button" aria-label="Toggle menu" aria-expanded="false" class="md:hidden flex flex-col justify-center items-center w-10 h-10 border border-[var(--color-ink)] rounded-full">
           <span class="menu-bar block w-4 h-[1.5px] bg-[var(--color-ink)] transition-transform"></span>
@@ -118,8 +119,8 @@ document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
     <section id="services" class="px-6 sm:px-10 py-24 sm:py-32">
       <div class="mx-auto max-w-7xl">
         <div class="reveal flex items-end justify-between gap-6 mb-14">
-          <h2 class="font-display font-extrabold text-4xl sm:text-5xl tracking-tight">What we do</h2>
-          <span class="hidden sm:block text-sm text-ink/50 font-medium">(04)</span>
+          <h2 class="font-display font-extrabold text-4xl sm:text-5xl tracking-tight">What we <span class="text-[var(--color-accent-2)]">do</span></h2>
+          <span class="hidden sm:block text-sm font-semibold text-[var(--color-accent)]">(04)</span>
         </div>
         <div class="divide-y divide-[var(--color-ink)]/10 border-t border-[var(--color-ink)]/10">
           ${services
@@ -139,17 +140,20 @@ document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
     <section id="work" class="px-6 sm:px-10 py-24 sm:py-32 bg-[var(--color-paper-dim)]">
       <div class="mx-auto max-w-7xl">
         <div class="reveal flex items-end justify-between gap-6 mb-14">
-          <h2 class="font-display font-extrabold text-4xl sm:text-5xl tracking-tight">Selected work</h2>
-          <span class="hidden sm:block text-sm text-ink/50 font-medium">(04)</span>
+          <h2 class="font-display font-extrabold text-4xl sm:text-5xl tracking-tight">Selected <span class="text-[var(--color-accent-2)]">work</span></h2>
+          <span class="hidden sm:block text-sm font-semibold text-[var(--color-accent)]">(04)</span>
         </div>
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 sm:gap-8">
           ${projects
             .map(
               (p) => `
             <a href="#" class="project-card reveal group block">
-              <div class="aspect-[4/3] rounded-2xl overflow-hidden relative" style="background:${p.hue}">
-                <div class="absolute inset-0 flex items-center justify-center font-display font-extrabold text-3xl text-[var(--color-ink)]/70 group-hover:scale-105 transition-transform duration-500">
-                  ${p.name}
+              <div class="relative">
+                <div class="project-card-shadow absolute inset-0"></div>
+                <div class="project-card-face relative aspect-[4/3] rounded-2xl overflow-hidden border-2 border-[var(--color-ink)] bg-[var(--color-paper)]">
+                  <div class="absolute inset-0 flex items-center justify-center text-center px-6 font-display font-extrabold text-2xl sm:text-3xl group-hover:scale-105 transition-transform duration-500">
+                    ${p.name}
+                  </div>
                 </div>
               </div>
               <div class="mt-4 flex items-center justify-between">
@@ -166,13 +170,13 @@ document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
     <section id="process" class="px-6 sm:px-10 py-24 sm:py-32">
       <div class="mx-auto max-w-7xl">
         <div class="reveal mb-14">
-          <h2 class="font-display font-extrabold text-4xl sm:text-5xl tracking-tight">How we work</h2>
+          <h2 class="font-display font-extrabold text-4xl sm:text-5xl tracking-tight">How we <span class="text-[var(--color-accent-2)]">work</span></h2>
         </div>
         <div class="grid grid-cols-1 sm:grid-cols-4 gap-8 sm:gap-6">
           ${process
             .map(
-              (p) => `
-            <div class="process-step reveal border-t-2 border-[var(--color-ink)] pt-5">
+              (p, i) => `
+            <div class="process-step reveal pt-5" style="border-top: 2px solid ${i % 2 === 0 ? 'var(--color-accent)' : 'var(--color-accent-2)'}">
               <span class="font-display text-ink/30 text-xl">${p.n}</span>
               <h3 class="font-display font-bold text-xl mt-2 mb-2">${p.title}</h3>
               <p class="text-ink/65 text-sm leading-relaxed">${p.copy}</p>
@@ -186,8 +190,9 @@ document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
     <section id="contact" class="px-6 sm:px-10 py-24 sm:py-32 bg-[var(--color-ink)] text-[var(--color-paper)]">
       <div class="mx-auto max-w-7xl">
         <p class="reveal text-sm font-semibold uppercase tracking-[0.2em] text-[var(--color-paper)]/50 mb-6">Get in touch</p>
-        <h2 class="reveal font-display font-extrabold tracking-tight text-[10vw] leading-[0.95] sm:text-6xl sm:leading-[1.02] max-w-3xl">
-          Let&rsquo;s build something fast.
+        <h2 id="contact-heading" class="duotone-heading reveal font-display font-extrabold tracking-tight text-[10vw] leading-[0.95] sm:text-6xl sm:leading-[1.02] max-w-3xl">
+          <span class="duotone-back" aria-hidden="true">Let&rsquo;s build something fast.</span>
+          <span class="duotone-front">Let&rsquo;s build something fast.</span>
         </h2>
         <div class="reveal mt-12 flex flex-col sm:flex-row sm:items-center gap-6 sm:gap-10">
           <a href="mailto:hello@bgwebagency.com" class="inline-flex items-center gap-3 text-xl sm:text-2xl font-display font-bold border-b-2 border-[var(--color-accent)] pb-1 w-fit">
@@ -213,6 +218,7 @@ document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
 
 initAnimations()
 setupMobileMenu()
+setupDuotoneHeading()
 
 function setupMobileMenu() {
   const toggle = document.querySelector<HTMLButtonElement>('#menu-toggle')
@@ -314,6 +320,25 @@ function setupScrollReveals() {
         start: 'top 85%',
       },
     })
+  })
+}
+
+function setupDuotoneHeading() {
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
+
+  const heading = document.querySelector<HTMLElement>('#contact-heading')
+  const back = heading?.querySelector<HTMLElement>('.duotone-back')
+  if (!heading || !back) return
+
+  heading.addEventListener('mousemove', (e) => {
+    const { left, top, width, height } = heading.getBoundingClientRect()
+    const x = ((e.clientX - left) / width - 0.5) * 16
+    const y = ((e.clientY - top) / height - 0.5) * 16
+    gsap.to(back, { x, y, duration: 0.4, ease: 'power2.out' })
+  })
+
+  heading.addEventListener('mouseleave', () => {
+    gsap.to(back, { x: 0, y: 0, duration: 0.4, ease: 'power2.out' })
   })
 }
 
