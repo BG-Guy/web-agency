@@ -2,6 +2,7 @@ import './style.css'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { curveTransition } from './transition'
+import { initRevealFooter } from './revealFooter'
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -77,6 +78,7 @@ document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
     </div>
   </div>
 
+  <div id="page-shell">
   <header id="site-nav" class="fixed top-0 inset-x-0 z-40 opacity-0 bg-[var(--color-paper)]/85 backdrop-blur-sm">
     <div class="mx-auto max-w-7xl px-6 sm:px-10 py-5 flex items-center justify-between">
       <a href="#top" class="flex items-center gap-2">
@@ -233,8 +235,9 @@ document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
       </div>
     </section>
   </main>
+  </div>
 
-  <footer class="px-6 sm:px-10 py-10 border-t border-[var(--color-ink)]/10">
+  <footer id="site-footer" class="px-6 sm:px-10 py-10 border-t border-[var(--color-ink)]/10">
     <div class="mx-auto max-w-7xl flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-ink/50">
       <span class="inline-flex items-center gap-2">${logoMark('w-5 h-5 shrink-0')}&copy; ${new Date().getFullYear()} Pine Valley Digital.</span>
       <div class="flex items-center gap-6">
@@ -249,6 +252,8 @@ document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
 initAnimations()
 setupMobileMenu()
 setupDuotoneHeading()
+
+initRevealFooter(document.getElementById('page-shell')!, document.getElementById('site-footer')!)
 
 function setupMobileMenu() {
   const toggle = document.querySelector<HTMLButtonElement>('#menu-toggle')

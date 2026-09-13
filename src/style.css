@@ -28,6 +28,14 @@ body {
   overflow-x: hidden;
 }
 
+/* The Vite mount point sits between body and the reveal-footer's
+   #page-shell — give it an explicit background so .rf-shell's
+   `background: inherit` (see revealFooter.ts) resolves to the actual
+   page color instead of transparent. */
+#app {
+  background: inherit;
+}
+
 ::selection {
   background: var(--color-accent);
   color: var(--color-accent-ink);
