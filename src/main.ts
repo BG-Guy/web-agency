@@ -17,6 +17,46 @@ const logoMark = (className: string) => `
   </svg>
 `
 
+// A single pine silhouette (no valley lines), for scattering in decorative backgrounds.
+const pineSilhouette = (className: string) => `
+  <svg class="${className}" viewBox="0 0 48 48" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <path d="M24 17 L35 29 L13 29 Z" />
+    <path d="M24 12 L32 22 L16 22 Z" />
+    <path d="M24 8 L28 16 L20 16 Z" />
+    <rect x="21" y="29" width="6" height="7" rx="1" />
+  </svg>
+`
+
+// Hero backdrop: a soft purple-to-green horizon (the logo's valley line,
+// stretched wide) with a scatter of pine silhouettes and one outline circle
+// standing in for a low sun. Everything sits well under 15% opacity so it
+// reads as texture, not as competing artwork, and never touches the copy.
+const heroBackground = () => `
+  <div class="hero-bg absolute inset-0 overflow-hidden pointer-events-none" aria-hidden="true">
+    <svg class="hero-horizon absolute inset-x-0 bottom-0 w-full h-[46%] sm:h-[58%]" viewBox="0 0 1440 320" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="horizonGradient" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0" stop-color="#6C3BAA" />
+          <stop offset="1" stop-color="#3BAA99" />
+        </linearGradient>
+      </defs>
+      <path
+        d="M0,230 C200,150 340,270 520,200 C700,130 860,250 1040,180 C1220,110 1340,210 1440,160"
+        fill="none" stroke="url(#horizonGradient)" stroke-width="2.5" stroke-linecap="round" stroke-opacity="0.22"
+      />
+    </svg>
+
+    <svg class="hero-sun absolute right-[10%] top-24 sm:top-28 w-20 h-20 sm:w-32 sm:h-32 opacity-20" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="50" cy="50" r="46" fill="none" stroke="#6C3BAA" stroke-width="1.5" />
+    </svg>
+
+    ${pineSilhouette('hero-pine absolute right-[2%] bottom-[12%] w-16 h-16 sm:w-24 sm:h-24 text-ink opacity-10')}
+    ${pineSilhouette('hero-pine absolute right-[13%] bottom-[4%] w-20 h-20 sm:w-28 sm:h-28 text-ink opacity-10')}
+    ${pineSilhouette('hero-pine absolute right-[23%] bottom-[16%] w-10 h-10 sm:w-14 sm:h-14 text-ink opacity-5')}
+    ${pineSilhouette('hero-pine absolute right-[32%] bottom-[6%] w-8 h-8 sm:w-10 sm:h-10 text-ink opacity-5')}
+  </div>
+`
+
 // Logotype: an italic serif for "Pine Valley" (the place) against the bold
 // grotesque for "Digital" (the craft) — same typographic pairing as the
 // body copy, deliberately contrasted for the wordmark itself.
@@ -108,8 +148,9 @@ document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
   </header>
 
   <main id="top">
-    <section id="hero" class="relative px-6 sm:px-10 pt-40 pb-24 sm:pt-52 sm:pb-32">
-      <div class="mx-auto max-w-7xl">
+    <section id="hero" class="relative overflow-hidden px-6 sm:px-10 pt-40 pb-24 sm:pt-52 sm:pb-32">
+      ${heroBackground()}
+      <div class="relative z-10 mx-auto max-w-7xl">
         <p class="hero-eyebrow overflow-hidden">
           <span class="block text-sm font-semibold uppercase tracking-[0.2em] text-ink/60">Web design &amp; development studio</span>
         </p>
@@ -296,9 +337,13 @@ function initAnimations() {
     return
   }
 
+  const heroBgEls = gsap.utils.toArray<HTMLElement>('.hero-pine, .hero-sun, .hero-horizon')
+  const heroBgTargetOpacity = heroBgEls.map((el) => getComputedStyle(el).opacity)
+
   gsap.set(heroLines, { yPercent: 110 })
   gsap.set(heroEyebrow, { yPercent: 110 })
   gsap.set(heroSub, { autoAlpha: 0, y: 16 })
+  gsap.set(heroBgEls, { opacity: 0 })
 
   const tl = gsap.timeline({ defaults: { ease: 'power4.out' } })
 
@@ -310,9 +355,25 @@ function initAnimations() {
     .to(heroEyebrow, { yPercent: 0, duration: 0.7 }, '-=0.5')
     .to(heroLines, { yPercent: 0, duration: 0.9, stagger: 0.08 }, '-=0.5')
     .to(heroSub, { autoAlpha: 1, y: 0, duration: 0.6 }, '-=0.5')
+    .to(heroBgEls, { opacity: (i) => Number(heroBgTargetOpacity[i]), duration: 1.4, stagger: 0.05 }, '-=0.9')
 
   setupScrollReveals()
   setupMarquee()
+  setupHeroParallax()
+}
+
+function setupHeroParallax() {
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
+  const hero = document.querySelector('#hero')
+  if (!hero) return
+
+  const scrollTrigger = { trigger: hero, start: 'top top', end: 'bottom top', scrub: true }
+
+  gsap.to('.hero-horizon', { yPercent: 10, ease: 'none', scrollTrigger })
+  gsap.to('.hero-sun', { yPercent: -8, ease: 'none', scrollTrigger })
+  gsap.utils.toArray<HTMLElement>('.hero-pine').forEach((pine, i) => {
+    gsap.to(pine, { yPercent: 16 + (i % 3) * 6, ease: 'none', scrollTrigger })
+  })
 }
 
 function setupScrollReveals() {
