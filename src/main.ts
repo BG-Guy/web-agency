@@ -1,6 +1,7 @@
 import './style.css'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import { curveTransition } from './transition'
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -276,15 +277,15 @@ function setupMobileMenu() {
   })
 }
 
-function initAnimations() {
+async function initAnimations() {
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
 
   const nav = document.querySelector('#site-nav')
   const heroLines = gsap.utils.toArray<HTMLElement>('.hero-line > span')
   const heroEyebrow = document.querySelector('.hero-eyebrow span')
   const heroSub = document.querySelector('.hero-sub')
-  const preloader = document.querySelector('#preloader')
-  const preWordSpan = document.querySelector('#preloader .pre-word span')
+  const preloader = document.querySelector<HTMLElement>('#preloader')
+  const preWord = document.querySelector<HTMLElement>('#preloader .pre-word')
 
   if (reduceMotion) {
     gsap.set([preloader], { display: 'none' })
@@ -299,20 +300,36 @@ function initAnimations() {
   gsap.set(heroLines, { yPercent: 110 })
   gsap.set(heroEyebrow, { yPercent: 110 })
   gsap.set(heroSub, { autoAlpha: 0, y: 16 })
+  gsap.set(preWord, { autoAlpha: 0, scale: 0.94 })
 
-  const tl = gsap.timeline({ defaults: { ease: 'power4.out' } })
-
-  tl.to(preWordSpan, { yPercent: 0, duration: 0.9, ease: 'power4.out' })
-    .to(preWordSpan, { yPercent: -110, duration: 0.6, ease: 'power3.in', delay: 0.25 })
-    .to(preloader, { yPercent: -100, duration: 0.7, ease: 'power4.inOut' }, '-=0.2')
-    .set(preloader, { display: 'none' })
-    .to(nav, { opacity: 1, duration: 0.6 }, '-=0.5')
-    .to(heroEyebrow, { yPercent: 0, duration: 0.7 }, '-=0.5')
-    .to(heroLines, { yPercent: 0, duration: 0.9, stagger: 0.08 }, '-=0.5')
+  const revealPage = gsap.timeline({ paused: true, defaults: { ease: 'power4.out' } })
+  revealPage
+    .to(nav, { opacity: 1, duration: 0.6 })
+    .to(heroEyebrow, { yPercent: 0, duration: 0.7 }, '<')
+    .to(heroLines, { yPercent: 0, duration: 0.9, stagger: 0.08 }, '<+=0.1')
     .to(heroSub, { autoAlpha: 1, y: 0, duration: 0.6 }, '-=0.5')
 
   setupScrollReveals()
   setupMarquee()
+
+  if (preloader) {
+    const curtain = curveTransition({ container: preloader, color: '#333333', duration: 650 })
+
+    await curtain.run(async () => {
+      await new Promise<void>((resolve) => {
+        gsap.to(preWord, { autoAlpha: 1, scale: 1, duration: 0.35, ease: 'back.out(1.6)', onComplete: resolve })
+      })
+      await new Promise((resolve) => setTimeout(resolve, 450))
+      await new Promise<void>((resolve) => {
+        gsap.to(preWord, { autoAlpha: 0, duration: 0.25, onComplete: resolve })
+      })
+      revealPage.play()
+    })
+
+    gsap.set(preloader, { display: 'none' })
+  } else {
+    revealPage.play()
+  }
 }
 
 function setupScrollReveals() {

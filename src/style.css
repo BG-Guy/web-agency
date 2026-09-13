@@ -37,25 +37,16 @@ body {
   font-family: var(--font-display);
 }
 
-/* Preloader */
+/* Preloader — background is painted by the curveTransition panel (see
+   transition.ts), not by CSS, so it can animate in with a curved edge. */
 #preloader {
   position: fixed;
   inset: 0;
   z-index: 100;
-  background: var(--color-ink);
   color: var(--color-paper);
   display: flex;
   align-items: center;
   justify-content: center;
-}
-
-#preloader .pre-word {
-  overflow: hidden;
-}
-
-#preloader .pre-word span {
-  display: inline-block;
-  transform: translateY(110%);
 }
 
 /* Marquee */
