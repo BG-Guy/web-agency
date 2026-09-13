@@ -3,6 +3,7 @@ import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { curveTransition } from './transition'
 import { initRevealFooter } from './revealFooter'
+import { initHoverTeaserMenu } from './hoverTeaserMenu'
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -96,17 +97,16 @@ document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
           <span class="btn-cta-bg"></span>
           <span class="btn-cta-label">Start a project</span>
         </a>
-        <button id="menu-toggle" type="button" aria-label="Toggle menu" aria-expanded="false" class="md:hidden flex flex-col justify-center items-center w-10 h-10 border border-[var(--color-ink)] rounded-full">
-          <span class="menu-bar block w-4 h-[1.5px] bg-[var(--color-ink)] transition-transform"></span>
-          <span class="menu-bar block w-4 h-[1.5px] bg-[var(--color-ink)] mt-1 transition-transform"></span>
+        <button id="menu-toggle" type="button" aria-label="Toggle menu" aria-expanded="false" class="md:hidden cursor-pointer flex items-center justify-center w-10 h-10 border border-[var(--color-ink)] rounded-full">
+          <span class="hamburger">
+            <span class="bar"></span>
+            <span class="bar"></span>
+          </span>
         </button>
       </div>
     </div>
-    <nav id="mobile-menu" class="md:hidden hidden flex-col gap-1 px-6 pb-6 text-lg font-display font-bold">
-      <a href="#services" class="mobile-nav-link py-3 border-b border-[var(--color-ink)]/10">Services</a>
-      <a href="#work" class="mobile-nav-link py-3 border-b border-[var(--color-ink)]/10">Work</a>
-      <a href="#process" class="mobile-nav-link py-3 border-b border-[var(--color-ink)]/10">Process</a>
-      <a href="#contact" class="mobile-nav-link py-3">Contact</a>
+    <nav id="mobile-menu" class="md:hidden hidden px-6 pb-6">
+      <div id="mobile-menu-teaser" class="w-full h-72 sm:h-80"></div>
     </nav>
   </header>
 
@@ -255,6 +255,13 @@ setupDuotoneHeading()
 
 initRevealFooter(document.getElementById('page-shell')!, document.getElementById('site-footer')!)
 
+initHoverTeaserMenu(document.getElementById('mobile-menu-teaser')!, [
+  { id: 'services', label: 'Services', href: '#services', color: 'var(--color-accent)' },
+  { id: 'work', label: 'Work', href: '#work', color: 'var(--color-accent-2)' },
+  { id: 'process', label: 'Process', href: '#process', color: '#d9a441' },
+  { id: 'contact', label: 'Contact', href: '#contact', color: 'var(--color-ink)' },
+])
+
 function setupMobileMenu() {
   const toggle = document.querySelector<HTMLButtonElement>('#menu-toggle')
   const menu = document.querySelector<HTMLElement>('#mobile-menu')
@@ -263,6 +270,7 @@ function setupMobileMenu() {
   const close = () => {
     menu.classList.add('hidden')
     menu.classList.remove('flex')
+    toggle.classList.remove('is-open')
     toggle.setAttribute('aria-expanded', 'false')
   }
 
@@ -273,12 +281,17 @@ function setupMobileMenu() {
     } else {
       menu.classList.remove('hidden')
       menu.classList.add('flex')
+      toggle.classList.add('is-open')
       toggle.setAttribute('aria-expanded', 'true')
     }
   })
 
-  menu.querySelectorAll('.mobile-nav-link').forEach((link) => {
-    link.addEventListener('click', close)
+  // The teaser menu's own links (data-link) may preventDefault on a first
+  // touch tap to just "prime" the color teaser — only close the drawer once
+  // a click is actually about to navigate.
+  menu.addEventListener('click', (e) => {
+    const link = (e.target as HTMLElement).closest('[data-link]')
+    if (link && !e.defaultPrevented) close()
   })
 }
 
