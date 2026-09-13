@@ -4,6 +4,19 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger'
 
 gsap.registerPlugin(ScrollTrigger)
 
+// Pine tree nestled in a valley — the two slopes in the brand purple/green,
+// the tree in currentColor so it adapts to light and dark backgrounds.
+const logoMark = (className: string) => `
+  <svg class="${className}" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <path d="M5 18 L24 42" stroke="#6C3BAA" stroke-width="4.5" stroke-linecap="round" />
+    <path d="M43 18 L24 42" stroke="#3BAA99" stroke-width="4.5" stroke-linecap="round" />
+    <path d="M24 17 L35 29 L13 29 Z" fill="currentColor" />
+    <path d="M24 12 L32 22 L16 22 Z" fill="currentColor" />
+    <path d="M24 8 L28 16 L20 16 Z" fill="currentColor" />
+    <rect x="21" y="29" width="6" height="7" rx="1" fill="currentColor" />
+  </svg>
+`
+
 const services = [
   {
     n: '01',
@@ -45,14 +58,20 @@ const marqueeItems = ['Web Design', 'Development', 'Brand Identity', 'SEO & Perf
 
 document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
   <div id="preloader">
-    <div class="pre-word font-display text-5xl sm:text-6xl font-extrabold tracking-tight">
-      <span>BG&nbsp;Web&nbsp;Agency</span>
+    <div class="pre-word font-display text-4xl sm:text-6xl font-extrabold tracking-tight">
+      <span class="inline-flex items-center gap-3 sm:gap-4">
+        ${logoMark('w-9 h-9 sm:w-12 sm:h-12 shrink-0')}
+        Pine&nbsp;Valley&nbsp;Digital
+      </span>
     </div>
   </div>
 
   <header id="site-nav" class="fixed top-0 inset-x-0 z-40 opacity-0 bg-[var(--color-paper)]/85 backdrop-blur-sm">
     <div class="mx-auto max-w-7xl px-6 sm:px-10 py-5 flex items-center justify-between">
-      <a href="#top" class="font-display font-extrabold text-lg tracking-tight">BG<span class="text-accent-ink bg-[var(--color-accent)] px-1 ml-0.5">Web</span></a>
+      <a href="#top" class="flex items-center gap-2 font-display font-extrabold text-lg tracking-tight">
+        ${logoMark('w-7 h-7 shrink-0')}
+        <span>Pine Valley</span>
+      </a>
       <nav class="hidden md:flex items-center gap-8 text-sm font-medium">
         <a href="#services" class="nav-link">Services</a>
         <a href="#work" class="nav-link">Work</a>
@@ -90,7 +109,7 @@ document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
         </h1>
         <div class="hero-sub mt-10 flex flex-col sm:flex-row sm:items-end sm:justify-between gap-8">
           <p class="max-w-md text-lg text-ink/70">
-            BG Web Agency designs and builds lean, high-performance websites for
+            Pine Valley Digital designs and builds lean, high-performance websites for
             studios, founders, and small teams who need to move fast without looking cheap.
           </p>
           <a href="#work" class="shrink-0 inline-flex items-center gap-2 text-sm font-semibold uppercase tracking-wide">
@@ -195,8 +214,8 @@ document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
           <span class="duotone-front">Let&rsquo;s build something fast.</span>
         </h2>
         <div class="reveal mt-12 flex flex-col sm:flex-row sm:items-center gap-6 sm:gap-10">
-          <a href="mailto:hello@bgwebagency.com" class="inline-flex items-center gap-3 text-xl sm:text-2xl font-display font-bold border-b-2 border-[var(--color-accent)] pb-1 w-fit">
-            hello@bgwebagency.com
+          <a href="mailto:hello@pinevalleydigital.com" class="inline-flex items-center gap-3 text-xl sm:text-2xl font-display font-bold border-b-2 border-[var(--color-accent)] pb-1 w-fit">
+            hello@pinevalleydigital.com
           </a>
           <span class="text-[var(--color-paper)]/50 text-sm">Usually replies within one business day.</span>
         </div>
@@ -206,7 +225,7 @@ document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
 
   <footer class="px-6 sm:px-10 py-10 border-t border-[var(--color-ink)]/10">
     <div class="mx-auto max-w-7xl flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-ink/50">
-      <span>&copy; ${new Date().getFullYear()} BG Web Agency.</span>
+      <span class="inline-flex items-center gap-2">${logoMark('w-5 h-5 shrink-0')}&copy; ${new Date().getFullYear()} Pine Valley Digital.</span>
       <div class="flex items-center gap-6">
         <a href="#services" class="nav-link">Services</a>
         <a href="#work" class="nav-link">Work</a>

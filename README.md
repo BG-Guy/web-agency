@@ -1,6 +1,6 @@
-# BG Web Agency
+# Pine Valley Digital
 
-Marketing site for BG Web Agency — a single-page, fast-loading site built with Vite, vanilla TypeScript, Tailwind CSS, and GSAP.
+Marketing site for Pine Valley Digital — a single-page, fast-loading site built with Vite, vanilla TypeScript, Tailwind CSS, and GSAP.
 
 ## Stack
 
