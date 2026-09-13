@@ -53,7 +53,20 @@ export function curveTransition({ container, color = '#4f46e5', duration = 650 }
     })
   }
 
+  // Draws the fully-covered state instantly (no animation, no bulge) — for
+  // starting a page load already closed, instead of animating "in" from
+  // nothing.
+  function setCovered() {
+    const { width, height } = container.getBoundingClientRect()
+    svg.setAttribute('viewBox', `0 0 ${width} ${height}`)
+    path.setAttribute('d', buildPanelPath(width, height, 0))
+  }
+
   return {
+    setCovered,
+    cover: () => animate('in'),
+    reveal: () => animate('out'),
+    destroy: () => svg.remove(),
     async run(swapContent: () => void | Promise<void>) {
       await animate('in') // cover the container
       await swapContent() // swap the DOM (or do work) while it's fully hidden

@@ -300,7 +300,7 @@ async function initAnimations() {
   gsap.set(heroLines, { yPercent: 110 })
   gsap.set(heroEyebrow, { yPercent: 110 })
   gsap.set(heroSub, { autoAlpha: 0, y: 16 })
-  gsap.set(preWord, { autoAlpha: 0, scale: 0.94 })
+  gsap.set(preWord, { autoAlpha: 1, scale: 1 })
 
   const revealPage = gsap.timeline({ paused: true, defaults: { ease: 'power4.out' } })
   revealPage
@@ -314,17 +314,15 @@ async function initAnimations() {
 
   if (preloader) {
     const curtain = curveTransition({ container: preloader, color: '#333333', duration: 650 })
+    curtain.setCovered() // start already closed, logo already visible — no grow-in
 
-    await curtain.run(async () => {
-      await new Promise<void>((resolve) => {
-        gsap.to(preWord, { autoAlpha: 1, scale: 1, duration: 0.35, ease: 'back.out(1.6)', onComplete: resolve })
-      })
-      await new Promise((resolve) => setTimeout(resolve, 450))
-      await new Promise<void>((resolve) => {
-        gsap.to(preWord, { autoAlpha: 0, duration: 0.25, onComplete: resolve })
-      })
-      revealPage.play()
+    await new Promise((resolve) => setTimeout(resolve, 600)) // hold on the logo
+    await new Promise<void>((resolve) => {
+      gsap.to(preWord, { autoAlpha: 0, duration: 0.25, onComplete: resolve })
     })
+    revealPage.play()
+    await curtain.reveal() // single motion: curtain opens, revealing the hero
+    curtain.destroy()
 
     gsap.set(preloader, { display: 'none' })
   } else {
