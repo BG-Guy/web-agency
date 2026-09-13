@@ -17,6 +17,16 @@ const logoMark = (className: string) => `
   </svg>
 `
 
+// Logotype: an italic serif for "Pine Valley" (the place) against the bold
+// grotesque for "Digital" (the craft) — same typographic pairing as the
+// body copy, deliberately contrasted for the wordmark itself.
+const logoWordmark = (sizeClass: string) => `
+  <span class="inline-flex items-baseline gap-[0.3em] leading-none ${sizeClass}">
+    <span class="font-logo italic font-medium">Pine Valley</span>
+    <span class="font-display font-extrabold tracking-tight">Digital</span>
+  </span>
+`
+
 const services = [
   {
     n: '01',
@@ -58,19 +68,19 @@ const marqueeItems = ['Web Design', 'Development', 'Brand Identity', 'SEO & Perf
 
 document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
   <div id="preloader">
-    <div class="pre-word font-display text-4xl sm:text-6xl font-extrabold tracking-tight">
+    <div class="pre-word tracking-tight">
       <span class="inline-flex items-center gap-3 sm:gap-4">
         ${logoMark('w-9 h-9 sm:w-12 sm:h-12 shrink-0')}
-        Pine&nbsp;Valley&nbsp;Digital
+        ${logoWordmark('text-4xl sm:text-6xl')}
       </span>
     </div>
   </div>
 
   <header id="site-nav" class="fixed top-0 inset-x-0 z-40 opacity-0 bg-[var(--color-paper)]/85 backdrop-blur-sm">
     <div class="mx-auto max-w-7xl px-6 sm:px-10 py-5 flex items-center justify-between">
-      <a href="#top" class="flex items-center gap-2 font-display font-extrabold text-lg tracking-tight">
+      <a href="#top" class="flex items-center gap-2">
         ${logoMark('w-7 h-7 shrink-0')}
-        <span>Pine Valley</span>
+        ${logoWordmark('text-base sm:text-lg')}
       </a>
       <nav class="hidden md:flex items-center gap-8 text-sm font-medium">
         <a href="#services" class="nav-link">Services</a>
