@@ -80,29 +80,31 @@ document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
   </div>
 
   <div id="page-shell">
-  <header id="site-nav" class="fixed top-0 inset-x-0 z-40 opacity-0 bg-[var(--color-paper)]/85 backdrop-blur-sm">
-    <div class="mx-auto max-w-7xl px-6 sm:px-10 py-5 flex items-center justify-between">
-      <a href="#top" class="flex items-center gap-2">
-        ${logoMark('w-7 h-7 shrink-0')}
-        ${logoWordmark('text-base sm:text-lg')}
-      </a>
-      <nav class="hidden md:flex items-center gap-8 text-sm font-medium">
-        <a href="#services" class="nav-link">Services</a>
-        <a href="#work" class="nav-link">Work</a>
-        <a href="#process" class="nav-link">Process</a>
-        <a href="#contact" class="nav-link">Contact</a>
-      </nav>
-      <div class="flex items-center gap-3">
-        <a href="#contact" class="btn-cta hidden sm:inline-flex text-sm font-semibold border border-[var(--color-ink)] rounded-full px-5 py-2">
-          <span class="btn-cta-bg"></span>
-          <span class="btn-cta-label">Start a project</span>
+  <header id="site-nav" class="navbar-shell fixed top-0 inset-x-0 z-40 opacity-0">
+    <div id="navbar-bar" class="navbar-bar border-[3px] border-[var(--color-ink)] bg-[var(--color-paper)]">
+      <div class="mx-auto max-w-7xl px-6 sm:px-10 py-5 flex items-center justify-between">
+        <a href="#top" class="flex items-center gap-2">
+          ${logoMark('w-7 h-7 shrink-0')}
+          ${logoWordmark('text-base sm:text-lg')}
         </a>
-        <button id="menu-toggle" type="button" aria-label="Toggle menu" aria-expanded="false" class="md:hidden cursor-pointer flex items-center justify-center w-10 h-10 border border-[var(--color-ink)] rounded-full">
-          <span class="hamburger">
-            <span class="bar"></span>
-            <span class="bar"></span>
-          </span>
-        </button>
+        <nav class="hidden md:flex items-center gap-8 text-sm font-medium">
+          <a href="#services" class="nav-link">Services</a>
+          <a href="#work" class="nav-link">Work</a>
+          <a href="#process" class="nav-link">Process</a>
+          <a href="#contact" class="nav-link">Contact</a>
+        </nav>
+        <div class="flex items-center gap-3">
+          <a href="#contact" class="btn-cta hidden sm:inline-flex text-sm font-semibold border border-[var(--color-ink)] rounded-full px-5 py-2">
+            <span class="btn-cta-bg"></span>
+            <span class="btn-cta-label">Start a project</span>
+          </a>
+          <button id="menu-toggle" type="button" aria-label="Toggle menu" aria-expanded="false" class="md:hidden cursor-pointer flex items-center justify-center w-10 h-10 border border-[var(--color-ink)] rounded-full">
+            <span class="hamburger">
+              <span class="bar"></span>
+              <span class="bar"></span>
+            </span>
+          </button>
+        </div>
       </div>
     </div>
     <nav id="mobile-menu" class="md:hidden hidden px-6 pb-6">
@@ -254,6 +256,7 @@ document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
 initAnimations()
 setupMobileMenu()
 setupDuotoneHeading()
+setupNavbarMorph()
 
 const { spacer: footerSpacer } = initRevealFooter(document.getElementById('page-shell')!, document.getElementById('site-footer')!)
 setupFooterMorph(footerSpacer)
@@ -385,6 +388,25 @@ function setupScrollReveals() {
         start: 'top 85%',
       },
     })
+  })
+}
+
+function setupNavbarMorph() {
+  const shell = document.querySelector<HTMLElement>('#site-nav')
+  if (!shell) return
+
+  // Docked flush rectangle at the very top of the page, morphing into a
+  // floating rounded pill over the first 100px of scroll — same technique
+  // as the shared Navbar (scroll progress 0-1 -> a CSS custom property,
+  // consumed via calc() per breakpoint), just translated out of
+  // Framer Motion's useTransform into ScrollTrigger's onUpdate.
+  ScrollTrigger.create({
+    start: 0,
+    end: 100,
+    scrub: true,
+    onUpdate: (self) => {
+      shell.style.setProperty('--nav-progress', String(self.progress))
+    },
   })
 }
 
