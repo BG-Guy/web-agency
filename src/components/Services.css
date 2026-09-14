@@ -1,0 +1,4 @@
+/* Services has no rules of its own beyond Tailwind utility classes and the
+   shared `.reveal` class (see src/styles/base.css). File kept for
+   consistency with the other components, and as a home for future
+   section-specific styling. */

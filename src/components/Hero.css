@@ -1,0 +1,4 @@
+/* Hero has no rules of its own beyond Tailwind utility classes — its
+   `.hero-line` / `.hero-eyebrow` / `.hero-sub` hooks are animated purely
+   via inline GSAP styles, set up in src/main.ts's intro sequence. This
+   file exists so Hero.ts has somewhere to import from if that changes. */
