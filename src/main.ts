@@ -74,7 +74,7 @@ document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
     <div class="pre-word tracking-tight">
       <span class="relative inline-flex items-center justify-center text-4xl sm:text-6xl">
         <span class="absolute inset-0 -z-10 flex items-center justify-center">
-          ${logoMark('w-[3em] h-[3em] opacity-20')}
+          ${logoMark('w-[6em] h-[6em] opacity-20')}
         </span>
         ${logoWordmark('')}
       </span>
