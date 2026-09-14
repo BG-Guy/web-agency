@@ -33,6 +33,24 @@ const logoWordmark = (sizeClass: string) => `
   </span>
 `
 
+// Full lockup: the mark sits behind and centered on the wordmark (not
+// beside it) — same composition everywhere it appears (preloader, nav,
+// footer), just at a size/opacity tuned to how much room each has.
+// `fontSizeClass` sets the em context the icon's size is relative to.
+// `isolate` is load-bearing: without it, the icon's -z-10 escapes past
+// this span to the nearest ancestor that establishes a stacking context
+// (e.g. #site-nav, which is `position: fixed`) and paints behind THAT
+// ancestor's own background — behind navbar-bar's opaque paper fill,
+// not just behind the wordmark text as intended.
+const logoLockup = (fontSizeClass: string, iconClass: string) => `
+  <span class="relative isolate inline-flex items-center justify-center ${fontSizeClass}">
+    <span class="absolute inset-0 -z-10 flex items-center justify-center">
+      ${logoMark(iconClass)}
+    </span>
+    ${logoWordmark('')}
+  </span>
+`
+
 const services = [
   {
     n: '01',
@@ -75,12 +93,7 @@ const marqueeItems = ['Web Design', 'Development', 'Brand Identity', 'SEO & Perf
 document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
   <div id="preloader">
     <div class="pre-word tracking-tight">
-      <span class="relative inline-flex items-center justify-center text-4xl sm:text-6xl">
-        <span class="absolute inset-0 -z-10 flex items-center justify-center">
-          ${logoMark('w-[6em] h-[6em] opacity-20')}
-        </span>
-        ${logoWordmark('')}
-      </span>
+      ${logoLockup('text-4xl sm:text-6xl', 'w-[6em] h-[6em] opacity-20')}
     </div>
   </div>
 
@@ -88,9 +101,8 @@ document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
   <header id="site-nav" class="navbar-shell fixed top-0 inset-x-0 z-40 opacity-0">
     <div id="navbar-bar" class="navbar-bar border-[3px] border-[var(--color-ink)] bg-[var(--color-paper)]">
       <div class="mx-auto max-w-7xl px-6 sm:px-10 py-5 flex items-center justify-between">
-        <a href="#top" class="flex items-center gap-2">
-          ${logoMark('w-7 h-7 shrink-0')}
-          ${logoWordmark('text-base sm:text-lg')}
+        <a href="#top" class="inline-flex">
+          ${logoLockup('text-base sm:text-lg', 'w-[2.2em] h-[2.2em] opacity-60')}
         </a>
         <nav class="hidden md:flex items-center gap-8 text-sm font-medium">
           <a href="#services" class="nav-link">Services</a>
@@ -249,7 +261,10 @@ document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
   <footer id="site-footer">
     <div id="footer-shell" class="footer-shell px-6 sm:px-10 py-10">
       <div class="mx-auto max-w-7xl flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-ink/50">
-        <span class="inline-flex items-center gap-2">${logoMark('w-5 h-5 shrink-0')}&copy; ${new Date().getFullYear()} Pine Valley Digital.</span>
+        <span class="inline-flex items-center gap-2">
+          <span>&copy; ${new Date().getFullYear()}</span>
+          ${logoLockup('text-sm', 'w-[2.2em] h-[2.2em] opacity-60')}
+        </span>
         <div class="flex items-center gap-6">
           <a href="#services" class="nav-link">Services</a>
           <a href="#work" class="nav-link">Work</a>
