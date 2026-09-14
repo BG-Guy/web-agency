@@ -265,14 +265,15 @@ body {
   color: var(--color-accent);
 }
 
-/* Navbar shell — direct port of the shared Navbar's own morph: docked
-   flush full-width at the very top of the page, becoming a floating
-   rounded pill over the first 100px of scroll (see setupNavbarMorph in
-   main.ts). Two layers, same as the source: the outer shell scales its
-   own top-inset and horizontal padding, the inner bar (border/shadow/bg)
-   scales its border-radius — both driven by one 0-1 progress value. */
+/* Navbar shell — the shared Navbar's morph technique, with the 0/1 ends
+   swapped: a floating rounded pill, inset from the screen edges, at the
+   very top of the page, docking into a flush full-width bar over the
+   first 100px of scroll (see setupNavbarMorph in main.ts). Two layers,
+   same as the source: the outer shell scales its own top-inset and
+   horizontal padding, the inner bar (border/shadow/bg) scales its
+   border-radius — both driven by one 0-1 progress value. */
 #site-nav.navbar-shell {
-  --nav-progress: 0;
+  --nav-progress: 1;
   top: calc(12px * var(--nav-progress));
   padding-left: calc(1rem * var(--nav-progress));
   padding-right: calc(1rem * var(--nav-progress));

@@ -395,17 +395,19 @@ function setupNavbarMorph() {
   const shell = document.querySelector<HTMLElement>('#site-nav')
   if (!shell) return
 
-  // Docked flush rectangle at the very top of the page, morphing into a
-  // floating rounded pill over the first 100px of scroll — same technique
-  // as the shared Navbar (scroll progress 0-1 -> a CSS custom property,
-  // consumed via calc() per breakpoint), just translated out of
-  // Framer Motion's useTransform into ScrollTrigger's onUpdate.
+  // Floating rounded pill, inset from the screen edges, at the very top of
+  // the page — docking into a flush full-width rectangle over the first
+  // 100px of scroll. Same technique as the shared Navbar (scroll progress
+  // -> a CSS custom property, consumed via calc() per breakpoint), just
+  // translated out of Framer Motion's useTransform into ScrollTrigger's
+  // onUpdate — with the 0/1 ends swapped relative to the source component,
+  // per this site's own direction (inset first, full-bleed on scroll).
   ScrollTrigger.create({
     start: 0,
     end: 100,
     scrub: true,
     onUpdate: (self) => {
-      shell.style.setProperty('--nav-progress', String(self.progress))
+      shell.style.setProperty('--nav-progress', String(1 - self.progress))
     },
   })
 }
