@@ -237,13 +237,15 @@ document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
   </main>
   </div>
 
-  <footer id="site-footer" class="px-6 sm:px-10 py-10 border-t border-[var(--color-ink)]/10">
-    <div class="mx-auto max-w-7xl flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-ink/50">
-      <span class="inline-flex items-center gap-2">${logoMark('w-5 h-5 shrink-0')}&copy; ${new Date().getFullYear()} Pine Valley Digital.</span>
-      <div class="flex items-center gap-6">
-        <a href="#services" class="nav-link">Services</a>
-        <a href="#work" class="nav-link">Work</a>
-        <a href="#contact" class="nav-link">Contact</a>
+  <footer id="site-footer">
+    <div id="footer-shell" class="footer-shell px-6 sm:px-10 py-10">
+      <div class="mx-auto max-w-7xl flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-ink/50">
+        <span class="inline-flex items-center gap-2">${logoMark('w-5 h-5 shrink-0')}&copy; ${new Date().getFullYear()} Pine Valley Digital.</span>
+        <div class="flex items-center gap-6">
+          <a href="#services" class="nav-link">Services</a>
+          <a href="#work" class="nav-link">Work</a>
+          <a href="#contact" class="nav-link">Contact</a>
+        </div>
       </div>
     </div>
   </footer>
@@ -253,7 +255,8 @@ initAnimations()
 setupMobileMenu()
 setupDuotoneHeading()
 
-initRevealFooter(document.getElementById('page-shell')!, document.getElementById('site-footer')!)
+const { spacer: footerSpacer } = initRevealFooter(document.getElementById('page-shell')!, document.getElementById('site-footer')!)
+setupFooterMorph(footerSpacer)
 
 initHoverTeaserMenu(document.getElementById('mobile-menu-teaser')!, [
   { id: 'services', label: 'Services', href: '#services', color: 'var(--color-accent)' },
@@ -382,6 +385,29 @@ function setupScrollReveals() {
         start: 'top 85%',
       },
     })
+  })
+}
+
+function setupFooterMorph(spacer: HTMLElement) {
+  const shell = document.querySelector<HTMLElement>('#footer-shell')
+  if (!shell) return
+
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    shell.style.setProperty('--footer-progress', '1')
+    return
+  }
+
+  // progress 0 exactly when the reveal window starts (spacer's top hits the
+  // viewport bottom — the same moment the footer starts peeking up from
+  // behind the shell); progress 1 at max scroll, fully revealed.
+  ScrollTrigger.create({
+    trigger: spacer,
+    start: 'top bottom',
+    end: 'bottom bottom',
+    scrub: true,
+    onUpdate: (self) => {
+      shell.style.setProperty('--footer-progress', String(self.progress))
+    },
   })
 }
 

@@ -43,6 +43,8 @@ export function initRevealFooter(shell: HTMLElement, footer: HTMLElement) {
   if ('ResizeObserver' in window) {
     new ResizeObserver(syncHeight).observe(footer)
   }
+
+  return { spacer }
 }
 
 // Usage — everything above the footer goes inside `shell`; `footer`
