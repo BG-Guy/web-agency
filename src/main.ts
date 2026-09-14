@@ -72,9 +72,11 @@ const marqueeItems = ['Web Design', 'Development', 'Brand Identity', 'SEO & Perf
 document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
   <div id="preloader">
     <div class="pre-word tracking-tight">
-      <span class="inline-flex items-center gap-3 sm:gap-4">
-        ${logoMark('w-9 h-9 sm:w-12 sm:h-12 shrink-0')}
-        ${logoWordmark('text-4xl sm:text-6xl')}
+      <span class="relative inline-flex items-center justify-center text-4xl sm:text-6xl">
+        <span class="absolute inset-0 -z-10 flex items-center justify-center">
+          ${logoMark('w-[3em] h-[3em] opacity-20')}
+        </span>
+        ${logoWordmark('')}
       </span>
     </div>
   </div>
@@ -94,9 +96,11 @@ document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
           <a href="#contact" class="nav-link">Contact</a>
         </nav>
         <div class="flex items-center gap-3">
-          <a href="#contact" class="btn-cta hidden sm:inline-flex text-sm font-semibold border border-[var(--color-ink)] rounded-full px-5 py-2">
-            <span class="btn-cta-bg"></span>
-            <span class="btn-cta-label">Start a project</span>
+          <a href="#contact" class="btn-cta hidden sm:inline-flex text-sm font-semibold">
+            <span class="btn-cta-clip">
+              <span class="btn-cta-bg"></span>
+              <span class="btn-cta-label">Start a project</span>
+            </span>
           </a>
           <button id="menu-toggle" type="button" aria-label="Toggle menu" aria-expanded="false" class="md:hidden cursor-pointer flex items-center justify-center w-10 h-10 border border-[var(--color-ink)] rounded-full">
             <span class="hamburger">
@@ -337,12 +341,13 @@ async function initAnimations() {
   setupMarquee()
 
   if (preloader) {
-    const curtain = curveTransition({ container: preloader, color: '#333333', duration: 650 })
+    // Total load sequence: 1200ms hold + 300ms fade + 1000ms curtain = 2.5s.
+    const curtain = curveTransition({ container: preloader, color: '#333333', duration: 1000 })
     curtain.setCovered() // start already closed, logo already visible — no grow-in
 
-    await new Promise((resolve) => setTimeout(resolve, 600)) // hold on the logo
+    await new Promise((resolve) => setTimeout(resolve, 1200)) // hold on the logo
     await new Promise<void>((resolve) => {
-      gsap.to(preWord, { autoAlpha: 0, duration: 0.25, onComplete: resolve })
+      gsap.to(preWord, { autoAlpha: 0, duration: 0.3, onComplete: resolve })
     })
     revealPage.play()
     await curtain.reveal() // single motion: curtain opens, revealing the hero
