@@ -363,3 +363,118 @@ body {
     margin-right: calc(2.5rem * (1 - var(--footer-progress)));
   }
 }
+
+/* Hero background blobs — soft, blurred purple/green color wash sitting
+   behind the otherwise-empty right side of the hero (see main.ts). */
+.hero-blob {
+  position: absolute;
+  z-index: 0;
+  border-radius: 999px;
+  pointer-events: none;
+  filter: blur(48px);
+}
+
+.hero-blob-a {
+  width: 14rem;
+  height: 14rem;
+  top: -2rem;
+  right: 2rem;
+  background: var(--color-accent);
+  opacity: 0.22;
+}
+
+.hero-blob-b {
+  width: 12rem;
+  height: 12rem;
+  right: 14%;
+  bottom: 1rem;
+  background: var(--color-accent-2);
+  opacity: 0.18;
+}
+
+@media (min-width: 640px) {
+  .hero-blob-a {
+    width: 19rem;
+    height: 19rem;
+    top: -1rem;
+    right: 4rem;
+  }
+  .hero-blob-b {
+    width: 16rem;
+    height: 16rem;
+    right: 16%;
+    bottom: 2rem;
+  }
+}
+
+/* "Fast" — tears into four horizontal slices that jolt sideways with
+   purple/green fringing, on a slow interval (see setupHeroGlitch). The
+   base word stays in normal flow at all times; slices are absolutely
+   positioned copies, invisible except during the brief glitch burst. */
+.hero-fast {
+  position: relative;
+  display: inline-block;
+  isolation: isolate;
+}
+
+.hero-fast-slice {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.hero-fast.is-glitching .s1 {
+  opacity: 1;
+  clip-path: inset(0 0 72% 0);
+  animation: hero-fast-s1 0.55s steps(4);
+  color: var(--color-accent);
+}
+
+.hero-fast.is-glitching .s2 {
+  opacity: 1;
+  clip-path: inset(28% 0 44% 0);
+  animation: hero-fast-s2 0.55s steps(4);
+}
+
+.hero-fast.is-glitching .s3 {
+  opacity: 1;
+  clip-path: inset(52% 0 20% 0);
+  animation: hero-fast-s3 0.55s steps(4);
+  color: var(--color-accent-2);
+}
+
+.hero-fast.is-glitching .s4 {
+  opacity: 1;
+  clip-path: inset(76% 0 0 0);
+  animation: hero-fast-s4 0.55s steps(4);
+}
+
+@keyframes hero-fast-s1 {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(11px); }
+  50% { transform: translateX(-7px); }
+  75% { transform: translateX(4px); }
+}
+
+@keyframes hero-fast-s2 {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-9px); }
+  50% { transform: translateX(5px); }
+  75% { transform: translateX(-3px); }
+}
+
+@keyframes hero-fast-s3 {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(7px); }
+  50% { transform: translateX(-11px); }
+  75% { transform: translateX(6px); }
+}
+
+@keyframes hero-fast-s4 {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-5px); }
+  50% { transform: translateX(8px); }
+  75% { transform: translateX(-4px); }
+}
